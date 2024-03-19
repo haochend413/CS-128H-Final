@@ -53,6 +53,8 @@ impl FastFourierTransform {
     //Splite the input_vector input into even array and odd array, then recursively call fft_rec() until hit base case: N == 2,
     //then compute the basic size 2 DFT butterfly and return, and After that, combining the value at each level
     //WHAT IF: data.len() is not power of 2??? (IDK)
+
+    //?: If data.len() is "close" to 2^n, add 0's to the input matrix(vector) so that len is close to 2^n. How close? 
     pub fn fft_rec(&self, data: &mut Vec<Complex<f64>>){
         let n = data.len();
         if  n == 2{

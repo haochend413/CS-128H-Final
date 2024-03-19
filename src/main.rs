@@ -37,22 +37,34 @@ pub fn fft(input: Vec<f64>) -> Vec<Complex<f64>> {
 //need a better name
 pub struct FastFourierTransform {
     pub input_vector: Vec<Complex<f64>>,
-    pub complex_vector: Vec<Complex<f64>>,
+    pub complex_vector: Vec<Complex<f64>>, //vector of w's;
+    //notice w^(ij) = w^(ji) 
     pub size: usize,
 }
 
 impl FastFourierTransform {
     //note: input_vector.re = data, input_vector.im = 0.0;
     //calculate w = e^(1i*2*PI*data[index]/data.len()), then store it into complex_vector
-
-    
-    pub fn new(data:Vec<f64>) -> FastFourierTransform {
-        todo!()
+    //wrong formula? this way there will be n^2 values instead of n's. 
+    //read in from input? std::io
+    pub fn new(data:Vec<Complex<f64>>) -> FastFourierTransform {
+        size = data.len();
+        input_vector = data; 
+        for i in 0..n {
+            w = e^(1i*2*PI*i/size); 
+            complex_vector.push(w); 
+            //complex[n] = w^n; 
+        }
+        FastFourierTransform {
+            size,
+            input_vector,
+            complex_vector,
+        }
     }
 
     
 
-    //Splite the input_vector input into even array and odd array, then recursively call fft_rec() until hit base case: N == 2,
+    //Split the input_vector input into even array and odd array, then recursively call fft_rec() until hit base case: N == 2,
     //then compute the basic size 2 DFT butterfly and return, and After that, combining the value at each level
     //WHAT IF: data.len() is not power of 2??? (IDK)
 
@@ -61,10 +73,21 @@ impl FastFourierTransform {
     
     pub fn fft_rec(&self, data: &mut Vec<Complex<f64>>){
         let n = data.len();
-        if  n == 2{
-            //data[0] = data[0] + data[1]
-            //data[1] = data[0] - data[1]
+        if  n == 2 {
+            data[0] = data[0] + data[1]
+            data[1] = data[0] - data[1]
+
+            //The matrix is [1,1][1,-1]
             return;
+        } else {
+            let vec_even: Vec<Complex<f64>>;
+            let vec_odd: Vec<Complex<f64>>; 
+
+            for i in 0..n/2 {
+                vec_even.push(data[i].clone());
+                vec_odd.push(data[i + 1].clone());
+            }
+            todo!(); 
         }
         //split input into even array and odd array, then recursive call fft_rec() * 2 here
 
@@ -74,6 +97,6 @@ impl FastFourierTransform {
         //complex = self.complex_vector[index] * data_odd[index]
         //data[x] = data_even[x] + complex
         //data[x + n/2] = data_even[x] - complex
-
     }
+    
 }

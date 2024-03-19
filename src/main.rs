@@ -7,6 +7,32 @@ extern crate num;
 use std::f64::consts::PI;
 use num::complex::Complex;
 
+/// Performs Fast Fourier Transform (FFT) on the input vector.
+/// 
+/// # Arguments
+/// 
+/// * `input` - A vector of real numbers representing the input signal.
+/// 
+/// # Returns
+/// 
+/// A vector of complex numbers representing the FFT output.
+/// 
+/// # Example
+/// 
+/// ```
+/// use num::complex::Complex;
+/// let output = fft::fft(vec![5.0, 3.0, 2.0, 1.0]);
+/// assert_eq!(output[0], Complex::new(11.0, 0.0));
+/// assert_eq!(output[1], Complex::new(3.0, -2.0));
+/// assert_eq!(output[2], Complex::new(3.0, 0.0));
+/// assert_eq!(output[3], Complex::new(3.0, 2.0));
+/// ```
+pub fn fft(input: Vec<f64>) -> Vec<Complex<f64>> {
+    let temp = FastFourierTransform::new(input);
+    let mut vec = temp.input_vector.clone();
+    temp.fft_rec(&mut vec);
+    vec
+}
 
 //need a better name
 pub struct FastFourierTransform {

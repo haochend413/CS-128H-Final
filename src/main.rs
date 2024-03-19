@@ -50,8 +50,9 @@ impl FastFourierTransform {
     pub fn new(data:Vec<Complex<f64>>) -> FastFourierTransform {
         size = data.len();
         input_vector = data; 
+        let j = Complex::new(0, 1); 
         for i in 0..n {
-            w = e^(i()*2*PI*i/size); 
+            w = e^(j*2*PI*i/size); 
             complex_vector.push(w); 
             //complex[n] = w^n; 
         }

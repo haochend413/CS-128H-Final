@@ -57,8 +57,8 @@ impl FastFourierTransform {
     //WHAT IF: data.len() is not power of 2??? (IDK)
 
     //?: If data.len() is "close" to 2^n, add 0's to the input matrix(vector) so that len is close to 2^n. How close? 
-    //Do I have to calculate different w's multiple times here? 
-    //There are at most data.len() number of w's for an input vetor. Matching w's with inputs?  
+    
+    
     pub fn fft_rec(&self, data: &mut Vec<Complex<f64>>){
         let n = data.len();
         if  n == 2{

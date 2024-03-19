@@ -44,16 +44,17 @@ pub struct FastFourierTransform {
 
 impl FastFourierTransform {
     //note: input_vector.re = data, input_vector.im = 0.0;
-    //calculate w = e^(1i*2*PI*data[index]/data.len()), then store it into complex_vector
+    //calculate w = e^(1i*2*PI*[index]/data.len()), then store it into complex_vector
     //wrong formula? this way there will be n^2 values instead of n's. 
     //read in from input? std::io
     pub fn new(data:Vec<Complex<f64>>) -> FastFourierTransform {
-        size = data.len();
-        input_vector = data; 
+        let size = data.len();
+        let input_vector = data; 
+        let mut complex_vector = Vec::with_capacity(size);
         let j = Complex::new(0, 1); 
-        for i in 0..n {
-            w = e^(j*2*PI*i/size); 
-            complex_vector.push(w); 
+        for i in 0..size {
+            let w = Complex::new(0.0, -2.0 * PI * x as f64 / size as f64).exp();
+            complex_vector.push(w);
             //complex[n] = w^n; 
         }
         FastFourierTransform {
@@ -75,14 +76,18 @@ impl FastFourierTransform {
     pub fn fft_rec(&self, data: &mut Vec<Complex<f64>>){
         let n = data.len();
         if  n == 2 {
-            data[0] = data[0] + data[1]
-            data[1] = data[0] - data[1]
+            //add a temp to store the value
+            let d0 = data[0];
+            let d1 = data[1];
+            //data[0] have already modified here
+            data[0] = d0 + d1;
+            data[1] = d0 - d1;
 
             //The matrix is [1,1][1,-1]
             return;
         } else {
-            let vec_even: Vec<Complex<f64>>;
-            let vec_odd: Vec<Complex<f64>>; 
+            let mut vec_even: Vec<Complex<f64>>;
+            let mut vec_odd: Vec<Complex<f64>>; 
 
             for i in 0..n/2 {
                 vec_even.push(data[i].clone());

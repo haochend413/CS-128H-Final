@@ -52,7 +52,7 @@ impl FastFourierTransform {
         let input_vector = data; 
         let mut complex_vector = Vec::with_capacity(size);
         let j = Complex::new(0, 1); 
-        for i in 0..size {
+        for x in 0..size {
             let w = Complex::new(0.0, -2.0 * PI * x as f64 / size as f64).exp();
             complex_vector.push(w);
             //complex[n] = w^n; 

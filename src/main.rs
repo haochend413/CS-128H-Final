@@ -51,7 +51,7 @@ impl FastFourierTransform {
         size = data.len();
         input_vector = data; 
         for i in 0..n {
-            w = e^(1i*2*PI*i/size); 
+            w = e^(i()*2*PI*i/size); 
             complex_vector.push(w); 
             //complex[n] = w^n; 
         }

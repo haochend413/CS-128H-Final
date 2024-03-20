@@ -1,11 +1,10 @@
-fn main() {
-    println!("Hello, world!");
-}
-
 extern crate num;
-//read https://docs.rs/num/latest/num/complex/struct.Complex.html !!
-use std::f64::consts::PI;
 use num::complex::Complex;
+use CS_128H_Final::FastFourierTransform;
+fn main() {
+    let output = fft(vec![5.0, 3.0, 2.0, 1.0]);
+    dbg!(output);
+}
 
 /// Performs Fast Fourier Transform (FFT) on the input vector.
 /// 
@@ -21,109 +20,19 @@ use num::complex::Complex;
 /// 
 /// ```
 /// use num::complex::Complex;
-/// let output = fft::fft(vec![5.0, 3.0, 2.0, 1.0]);
+/// let output = fft(vec![5.0, 3.0, 2.0, 1.0]);
 /// assert_eq!(output[0], Complex::new(11.0, 0.0));
 /// assert_eq!(output[1], Complex::new(3.0, -2.0));
 /// assert_eq!(output[2], Complex::new(3.0, 0.0));
 /// assert_eq!(output[3], Complex::new(3.0, 2.0));
 /// ```
 pub fn fft(input: Vec<f64>) -> Vec<Complex<f64>> {
-    let temp = FastFourierTransform::new(input);
-    let mut vec = temp.input_vector.clone();
-    temp.fft_rec(&mut vec);
+    let transform = FastFourierTransform::new(input.clone());
+    let mut vec: Vec<Complex<f64>> = input
+        .iter()
+        .map(|&x| Complex::new(x, 0.0))
+        .collect();
+    transform.fft_rec(&mut vec);
     vec
 }
 
-//need a better name
-pub struct FastFourierTransform {
-    pub input_vector: Vec<Complex<f64>>,
-    pub complex_vector: Vec<Complex<f64>>, //vector of w's;
-    //notice w^(ij) = w^(ji) 
-    pub size: usize,
-}
-
-impl FastFourierTransform {
-    //note: input_vector.re = data, input_vector.im = 0.0;
-    //calculate w = e^(1i*2*PI*[index]/data.len()), then store it into complex_vector
-    //read in from input? std::io
-    pub fn new(data:Vec<Complex<f64>>) -> FastFourierTransform {
-        let size = data.len();
-        let input_vector = data; 
-        let mut complex_vector = Vec::with_capacity(size);
-        for x in 0..size {
-            let w = Complex::new(0.0, -2.0 * PI * x as f64 / size as f64).exp();
-            complex_vector.push(w);
-            //complex[n] = w^n; 
-        }
-        FastFourierTransform {
-            size,
-            input_vector,
-            complex_vector,
-        }
-    }
-
-    
-
-    //Split the input_vector input into even array and odd array, then recursively call fft_rec() until hit base case: N == 2,
-    //then compute the basic size 2 DFT butterfly and return, and After that, combining the value at each level
-    //WHAT IF: data.len() is not power of 2??? (IDK)
-
-    //?: If data.len() is "close" to 2^n, add 0's to the input matrix(vector) so that len is close to 2^n. How close? 
-    
-    
-    
-    pub fn fft_rec(&self, data: &mut Vec<Complex<f64>>){
-        //make up zeros
-        let mut p = 1;
-        let mut num_to_add = 0;  
-        loop {
-            let a = power(2, p);
-            if a < data.len() {
-                p++;
-            } else {
-                num_to_add = power(2, p) - data.len();
-                break;
-            }
-        }
-        for i in 0..num_to_add{
-            data.push(0); 
-        }
-
-        let n = data.len();
-        if  n == 2 {
-            //add a temp to store the value
-            let d0 = data[0];
-            let d1 = data[1];
-            //data[0] have already modified here
-            data[0] = d0 + d1;
-            data[1] = d0 - d1;
-            //The matrix is [1,1][1,-1]
-            return;
-        } else {
-            let mut vec_even: Vec<Complex<f64>>;
-            let mut vec_odd: Vec<Complex<f64>>; 
-
-            for i in 0..n/2 {
-                vec_even.push(data[i].clone());
-                vec_odd.push(data[i + 1].clone());
-            }
-
-            //calculate fourier transform;
-            //calculate Ek and Ok
-
-            
-            
-            
-            
-        }
-        //split input into even array and odd array, then recursive call fft_rec() * 2 here
-
-        //----------------------------------------------------------------------------------//
-        //for x in 0..n/2
-        //index = N/n * x, where N = self.size, and n = data.len() 
-        //complex = self.complex_vector[index] * data_odd[index]
-        //data[x] = data_even[x] + complex
-        //data[x + n/2] = data_even[x] - complex
-    }
-    
-}

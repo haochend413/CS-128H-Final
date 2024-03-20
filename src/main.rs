@@ -71,7 +71,24 @@ impl FastFourierTransform {
     //?: If data.len() is "close" to 2^n, add 0's to the input matrix(vector) so that len is close to 2^n. How close? 
     
     
+    
     pub fn fft_rec(&self, data: &mut Vec<Complex<f64>>){
+        //make up zeros
+        let mut p = 1;
+        let mut num_to_add = 0;  
+        loop {
+            let a = power(2, p);
+            if a < data.len() {
+                p++;
+            } else {
+                num_to_add = power(2, p) - data.len();
+                break;
+            }
+        }
+        for i in 0..num_to_add{
+            data.push(0); 
+        }
+
         let n = data.len();
         if  n == 2 {
             //add a temp to store the value
@@ -90,7 +107,14 @@ impl FastFourierTransform {
                 vec_even.push(data[i].clone());
                 vec_odd.push(data[i + 1].clone());
             }
-            todo!(); 
+
+            //calculate fourier transform;
+            //calculate Ek and Ok
+
+            
+            
+            
+            
         }
         //split input into even array and odd array, then recursive call fft_rec() * 2 here
 

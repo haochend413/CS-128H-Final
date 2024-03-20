@@ -38,11 +38,6 @@ Our project focuses on implementing the Cooley-Tukey Fast Fourier Transform (FFT
 
 - Verify the correctness of the implementation through unit tests and validation against known FFT results by Matlab.
 
-- Completion of multithreading optimization.
-
-- Comprehensive performance analysis and benchmarking.
-
-- Finalization of documentation and project submission.
 
   
 

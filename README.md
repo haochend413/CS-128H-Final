@@ -30,7 +30,7 @@ Our project focuses on implementing the Cooley-Tukey Fast Fourier Transform (FFT
 
 ## Technical Overview
 
-### description
+### Description
 
 - Develop the core algorithm for computing the Cooley-Tukey FFT in Rust.
 - Implement both forward and inverse FFT transformations.

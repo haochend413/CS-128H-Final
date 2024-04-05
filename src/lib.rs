@@ -1,7 +1,69 @@
+#![feature(portable_simd)]
+#![feature(array_chunks)]
+#![feature(slice_as_chunks)]
+// #[macro_use]
+
+/*
+!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+Installing Rust nightly to use those features, commands:
+   rustup default nightly
+*/
+
 extern crate num;
-use std::f64::consts::PI;
-use num::complex::Complex;
-#[derive(Debug)]
+use std::{f64::consts::PI,simd::Simd};
+use num::complex::{Complex, ComplexFloat};
+use std::simd::f64x2;
+// use itertools::{Itertools, Either};
+
+//only implemented for base case where data.len() == 4 (for fully simd operation)
+//see: https://doc.rust-lang.org/std/simd/type.f64x2.html
+pub fn fft_simd_f64x2(data: Vec<f64>) -> Vec<(Simd<f64, 2>, Simd<f64, 2>)>{
+    let size = data.len();
+    let half = size / 2;
+
+    let complex_vector: Vec<_> = (0..half)
+        .map(|x| Complex::new(0.0, -2.0 * PI * x as f64 / size as f64).exp())
+        .collect();
+
+    // when size == 4
+    // d0 + d1, d0 - d1
+    let (left, right) = data.split_at(half);
+    let base_case:Vec<_>= left.array_chunks::<2>()
+        .map(|&left| f64x2::from_array(left))
+        .zip(right.array_chunks::<2>().map(|&right| f64x2::from_array(right)))
+        .flat_map(|(left, right)| vec![((left+right), f64x2::splat(0.0)), ((left-right), f64x2::splat(0.0))])
+        .collect();
+
+    // dbg!(base_case.clone());
+
+    // complex<f64x2>
+    let real= [complex_vector[0].re(), complex_vector[1].re()];
+    let imagine= [complex_vector[0].im(), complex_vector[1].im()];
+    let complex = (f64x2::from_array(real), f64x2::from_array(imagine));
+
+    // odd<f64x2> & even<f64x2>
+    // PS: odd/even index, start at 0 not 1!
+    let (even, odd) = 
+        (((base_case[0].0.interleave(base_case[1].0).0), (base_case[0].1.interleave(base_case[1].1).0)),
+        ((base_case[0].0.interleave(base_case[1].0).1), (base_case[0].1.interleave(base_case[1].1).1)));
+
+    // dbg!(even, odd);
+        
+    // odd<f64x2> * complex<f64x2> = tmp<f64x2>
+    // did not found complex * complex in portable_simd, implemented manually
+    let temp = 
+        ((odd.0 * complex.0 - odd.1 * complex.1), (odd.0 * complex.1 + odd.1 * complex.0));
+
+    // result[0 & 1] = even<f64x2> + tmp<f64x2>
+    let a = (even.0 + temp.0).interleave(even.1 + temp.1);
+    // result[2 & 3] = even<f64x2> - tmp<f64x2>
+    let b = (even.0 - temp.0).interleave(even.1 - temp.1);
+
+    vec![a, b]
+
+}
+
+
 pub struct FastFourierTransform {
     pub complex_vector: Vec<Complex<f64>>,
     pub size: usize,

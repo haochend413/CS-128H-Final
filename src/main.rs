@@ -1,9 +1,19 @@
 extern crate num;
 use num::complex::Complex;
-use CS_128H_Final::FastFourierTransform;
+use fft::{fft_simd_f64x2, FastFourierTransform};
+
+/*
+!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+Installing Rust nightly to use those features, commands below:
+   rustup default nightly
+*/
+
 fn main() {
     let output = fft(vec![5.0, 3.0, 2.0, 1.0]);
     dbg!(output);
+
+    let output_simd = fft_simd_f64x2(vec![5.0, 3.0, 2.0, 1.0]);
+    dbg!(output_simd);
 }
 
 /// Performs Fast Fourier Transform (FFT) on the input vector.

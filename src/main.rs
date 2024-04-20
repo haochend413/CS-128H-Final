@@ -1,48 +1,38 @@
+use actix_web::{web, App, HttpServer, HttpResponse, Responder};
+use actix_files::NamedFile;
+use fft::FastFourierTransform; // Assuming your crate name is "your_crate_name"
 extern crate num;
 use num::complex::Complex;
-use fft::{fft_simd_f64x2, FastFourierTransform};
+use itertools::{Itertools, Either}; 
 
-/*
-!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-Installing Rust nightly to use those features, commands below:
-   rustup default nightly
-*/
-
-fn main() {
-    let output = fft(vec![5.0, 3.0, 2.0, 1.0]);
-    dbg!(output);
-
-    let output_simd = fft_simd_f64x2(vec![5.0, 3.0, 2.0, 1.0]);
-    dbg!(output_simd);
+async fn index() -> Result<NamedFile, actix_web::Error> {
+    let file = NamedFile::open("static/index.html")?;
+    Ok(file)
 }
 
-/// Performs Fast Fourier Transform (FFT) on the input vector.
-/// 
-/// # Arguments
-/// 
-/// * `input` - A vector of real numbers representing the input signal.
-/// 
-/// # Returns
-/// 
-/// A vector of complex numbers representing the FFT output.
-/// 
-/// # Example
-/// 
-/// ```
-/// use num::complex::Complex;
-/// let output = fft(vec![5.0, 3.0, 2.0, 1.0]);
-/// assert_eq!(output[0], Complex::new(11.0, 0.0));
-/// assert_eq!(output[1], Complex::new(3.0, -2.0));
-/// assert_eq!(output[2], Complex::new(3.0, 0.0));
-/// assert_eq!(output[3], Complex::new(3.0, 2.0));
-/// ```
-pub fn fft(input: Vec<f64>) -> Vec<Complex<f64>> {
+async fn calculate(path: web::Path<Vec<f64>>) -> impl Responder {
+    let input: Vec<f64> = path.into_inner();
     let transform = FastFourierTransform::new(input.clone());
+    // let output = transform.fft(input);
     let mut vec: Vec<Complex<f64>> = input
         .iter()
         .map(|&x| Complex::new(x, 0.0))
         .collect();
-    transform.fft_rec(&mut vec);
-    vec
+    transform.fft_rec(&mut vec); // Correct method call to fft_rec
+    let result: Vec<(f64, f64)> = vec.iter().map(|c| (c.re, c.im)).collect(); // Iterate over vec instead of transform
+    HttpResponse::Ok().json(result)
 }
+
+#[actix_web::main]
+async fn main() -> std::io::Result<()> {
+    HttpServer::new(|| {
+        App::new()
+            .route("/", web::get().to(index))
+            .route("/calculate/{values}", web::get().to(calculate))
+    })
+    .bind("127.0.0.1:8080")?
+    .run()
+    .await
+}
+
 

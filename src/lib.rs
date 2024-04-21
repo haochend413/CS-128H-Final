@@ -12,6 +12,7 @@ Installing Rust nightly to use those features, commands:
 extern crate num;
 use std::f64::consts::PI; 
 use num::complex::{Complex, ComplexFloat};
+
 // use std::{f64::consts::PI,simd::Simd};
 // use std::simd::f64x2;
 // use itertools::{Itertools, Either};

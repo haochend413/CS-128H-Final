@@ -1,9 +1,10 @@
 use actix_web::{web, App, HttpServer, HttpResponse, Responder};
 use actix_files::NamedFile;
-use fft::FastFourierTransform; // Assuming your crate name is "your_crate_name"
-extern crate num;
+use fft::FastFourierTransform; 
 use num::complex::Complex;
 use itertools::{Itertools, Either}; 
+
+extern crate num;
 
 async fn index() -> Result<NamedFile, actix_web::Error> {
     let file = NamedFile::open("static/index.html")?;
@@ -18,8 +19,8 @@ async fn calculate(path: web::Path<Vec<f64>>) -> impl Responder {
         .iter()
         .map(|&x| Complex::new(x, 0.0))
         .collect();
-    transform.fft_rec(&mut vec); // Correct method call to fft_rec
-    let result: Vec<(f64, f64)> = vec.iter().map(|c| (c.re, c.im)).collect(); // Iterate over vec instead of transform
+    transform.fft_rec(&mut vec); 
+    let result: Vec<(f64, f64)> = vec.iter().map(|c| (c.re, c.im)).collect(); 
     HttpResponse::Ok().json(result)
 }
 

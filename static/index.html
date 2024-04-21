@@ -10,12 +10,12 @@
     <form id="inputForm">
       <label for="input">Input Vector:</label><br />
       <input type="text" id="input" name="input" /><br />
-      <button type="button" onclick="calculate()">Calculate FFT</button>
+      <button type="button" onclick="tocalculate()">Calculate FFT</button>
     </form>
     <div id="output"></div>
 
     <script>
-      async function calculate() {
+      async function tocalculate() {
         const input = document
           .getElementById("input")
           .value.split(",")

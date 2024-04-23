@@ -2,34 +2,27 @@ use actix_web::{web, App, HttpServer, HttpResponse, Responder};
 use actix_files::NamedFile;
 use fft::FastFourierTransform; 
 use num::complex::Complex;
-
-// use itertools::{Itertools, Either}; 
-
 extern crate num;
 
-// #[derive(Deserialize)]
-// struct Info {
-//     input: &str, 
-// }
 
 async fn index() -> Result<NamedFile, actix_web::Error> {
     let file = NamedFile::open("static/index.html")?;
     Ok(file)
 }
 
-async fn calculate(path: web::Path<String>) -> impl Responder {
-    // let input: Vec<f64> = path.into_inner();
+async fn calculatefft(path: web::Path<String>) -> impl Responder {
 
-    let input_string = path.into_inner(); // Extract the string from the Json wrapper
+    let input_string = path.into_inner();
 
-    println!("{}", input_string); 
+    //println!("{}", input_string); 
+
     let input: Vec<f64> = input_string
         .split(',')
         .map(|s| s.trim().parse::<f64>())
-        .filter_map(Result::ok) // Filter out errors, keeping only successful parses.
+        .filter_map(Result::ok)
         .collect();
 
-    println!("{:?}", input); 
+    //println!("{:?}", input); 
 
 
     let transform = FastFourierTransform::new(input.clone());
@@ -39,7 +32,9 @@ async fn calculate(path: web::Path<String>) -> impl Responder {
         .collect();
     transform.fft_rec(&mut vec); 
     let result: Vec<(f64, f64)> = vec.iter().map(|c| (c.re, c.im)).collect(); 
-    println!("{:?}", result); 
+
+    //println!("{:?}", result); 
+
     HttpResponse::Ok().json(result)
 }
 
@@ -48,7 +43,7 @@ async fn main() -> std::io::Result<()> {
     HttpServer::new(|| {
         App::new()
             .route("/", web::get().to(index))
-            .route("/calculate/{value}", web::get().to(calculate))
+            .route("/calculate/{value}", web::get().to(calculatefft))
     })
     .bind("127.0.0.1:8080")?
     .run()

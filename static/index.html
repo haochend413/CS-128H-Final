@@ -24,9 +24,7 @@
     <script>
       async function tocalculate() {
         const input = document.getElementById("input").value;
-
-        console.log(input);
-
+        //console.log(input);
         const response = await fetch("/calculate/" + JSON.stringify(input));
         const result = await response.json();
         document.getElementById("output").innerText = JSON.stringify(result);

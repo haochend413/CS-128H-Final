@@ -1,0 +1,41 @@
+.u-textCenter {
+  text-align: center;
+}
+
+/* make variables in :root; must start with --; */
+:root {
+  /* background: gold; */
+  --primary: #396dff;
+  --greenblue: #0ff;
+  font-family: Cambria, Cochin, Georgia, Times, "Times New Roman", serif;
+}
+
+body {
+  margin-top: 0;
+  margin-left: 5px;
+  margin-right: 5px;
+  padding: 0;
+  border: 0;
+}
+
+.piccenter {
+  margin: 0 auto;
+  display: block;
+}
+
+/* description of classes*/
+.navT {
+  margin: 0 0 5px 0;
+
+  font-weight: bold;
+  color: rgb(229, 229, 236);
+  font: 20px;
+  background-color: #1b0cbd;
+}
+
+.box {
+  margin: 1px;
+  border: 1px solid;
+  padding: 20px;
+  border-color: black;
+}

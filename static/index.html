@@ -5,14 +5,21 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>FFT Calculator</title>
   </head>
+  <link rel="stylesheet" href="style.css" />
   <body>
     <h1>FFT Calculator</h1>
+    <h3>!!!READ BEFORE USE!!!</h3>
+    <div>
+      Make sure your input is in the right formula. For example: to input vector
+      [1,1,1,1], please enter ,1,1,1,1, .
+    </div>
+    <div>//</div>
     <form id="inputForm">
       <label for="input">Input Vector:</label><br />
       <input type="text" id="input" name="input" /><br />
       <button type="button" onclick="tocalculate()">Calculate FFT</button>
     </form>
-    <div id="output"></div>
+    <div id="output" class="box"></div>
 
     <script>
       async function tocalculate() {

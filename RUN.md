@@ -38,4 +38,4 @@ cargo run
 
 ## Play in browser
 
-After the server is running, direct to https://127.0.0.1:8080 in your local browser and type in input vector. BE SURE TO TYPE IN THE VECTOR IN THE CORRECT FORMAT!!! You can see the format on the webpage. By clicking the calculate button, the result will show on the interface. The result is shown with tuples of numbers. The first entry of every tuple demonstrates the real part of the corresponding number of the output, and the second entry deomstrates the imaginary part. To re-enter the vector, refresh the page and type in another input. Have fun!
+After the server is running, direct to https://127.0.0.1:8080 in your local browser and type in input vector. **BE SURE TO TYPE IN THE VECTOR IN THE CORRECT FORMAT!!!** You can see the format on the webpage. By clicking the calculate button, the result will show on the interface. The result is shown with tuples of numbers, with the first entry of every tuple demonstrates the real part of the corresponding number of the output, and the second entry demonstrates the imaginary part. To re-enter a vector, refresh the page and type in another input. Have fun!

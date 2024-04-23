@@ -1,4 +1,4 @@
-# How to run the file
+# How to run the project
 
 ## Set up the project
 

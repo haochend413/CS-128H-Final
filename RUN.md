@@ -44,4 +44,13 @@ cargo run
 
 ## Play in browser
 
-After the server is running, direct to https://127.0.0.1:8080 in your local browser and type in the input vector. If this doesn't work, please try copying 127.0.0.1:8080 into the search bar of your browser and enter. **BE SURE TO TYPE IN THE VECTOR IN THE CORRECT FORMAT!!!** You can see the format on the webpage. By clicking the calculate button, the result will show on the interface. The result is shown with tuples of numbers, with the first entry of every tuple demonstrates the real part of the corresponding number of the output, and the second entry demonstrates the imaginary part. To re-enter a vector, refresh the page and type in another input. Have fun!
+After the server is running, direct to https://127.0.0.1:8080 in your local browser and type in the input vector. If this doesn't work, please try copying 127.0.0.1:8080 into the search bar of your browser and enter. 
+
+**BE SURE TO TYPE IN THE VECTOR IN THE CORRECT FORMAT!!!** You can see the format on the webpage. To be more specific, be sure that your vector is comma separated and **there are extra commas on both ends of the vector**. 
+For example, if you want to enter 1,1,1,1 as your input, please type in: 
+
+```bash
+,1,1,1,1,
+```
+
+By clicking the calculate button, the result will show on the interface. The result is shown with tuples of numbers, with the first entry of every tuple demonstrates the real part of the corresponding number of the output, and the second entry demonstrates the imaginary part. To re-enter a vector, refresh the page and type in another input. Have fun!

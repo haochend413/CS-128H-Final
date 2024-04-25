@@ -33,7 +33,7 @@ You don't need to install nightly to use the calculator. We only implemented the
 Direct into the directory and run the server in VSCode terminal with:
 
 ```bash
-cd CS-128H-Final
+cd FFT-Calculator
 ```
 
 ```bash

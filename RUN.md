@@ -2,7 +2,7 @@
 
 ## Set up the project
 
-Make sure rust and cargo are installed. You can check with:
+Make sure rust and cargo are installed on your system. You can check with:
 
 ```bash
 rustc --version
@@ -13,6 +13,8 @@ and
 ```bash
 cargo --version
 ```
+
+For rust and cargo installation guide, please visit https://doc.rust-lang.org/cargo/getting-started/installation.html; 
 
 Clone the project from the repo:
 
@@ -42,4 +44,4 @@ cargo run
 
 ## Play in browser
 
-After the server is running, direct to https://127.0.0.1:8080 in your local browser and type in input vector. **BE SURE TO TYPE IN THE VECTOR IN THE CORRECT FORMAT!!!** You can see the format on the webpage. By clicking the calculate button, the result will show on the interface. The result is shown with tuples of numbers, with the first entry of every tuple demonstrates the real part of the corresponding number of the output, and the second entry demonstrates the imaginary part. To re-enter a vector, refresh the page and type in another input. Have fun!
+After the server is running, direct to https://127.0.0.1:8080 in your local browser and type in the input vector. If this doesn't work, please try copying 127.0.0.1:8080 into the search bar of your browser and enter. **BE SURE TO TYPE IN THE VECTOR IN THE CORRECT FORMAT!!!** You can see the format on the webpage. By clicking the calculate button, the result will show on the interface. The result is shown with tuples of numbers, with the first entry of every tuple demonstrates the real part of the corresponding number of the output, and the second entry demonstrates the imaginary part. To re-enter a vector, refresh the page and type in another input. Have fun!

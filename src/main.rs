@@ -1,5 +1,5 @@
 use actix_web::{web, App, HttpServer, HttpResponse, Responder};
-use actix_files::NamedFile;
+use actix_files::{NamedFile,Files};
 use fft::FastFourierTransform; 
 use num::complex::Complex;
 extern crate num;
@@ -42,6 +42,7 @@ async fn calculatefft(path: web::Path<String>) -> impl Responder {
 async fn main() -> std::io::Result<()> {
     HttpServer::new(|| {
         App::new()
+        .service(actix_files::Files::new("/static", "static").show_files_listing())
             .route("/", web::get().to(index))
             .route("/calculate/{value}", web::get().to(calculatefft))
     })

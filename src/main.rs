@@ -1,6 +1,6 @@
 use actix_web::{web, App, HttpServer, HttpResponse, Responder};
-use actix_files::{NamedFile,Files};
-use fft::FastFourierTransform; 
+use actix_files::NamedFile;
+use fft::{simd_fft, FastFourierTransform}; 
 use num::complex::Complex;
 extern crate num;
 
@@ -25,12 +25,15 @@ async fn calculatefft(path: web::Path<String>) -> impl Responder {
     //println!("{:?}", input); 
 
 
-    let transform = FastFourierTransform::new(input.clone());
-    let mut vec: Vec<Complex<f64>> = input
-        .iter()
-        .map(|&x| Complex::new(x, 0.0))
-        .collect();
-    transform.fft_rec(&mut vec); 
+    let vec = if input.len() >= 8 {
+        simd_fft(input)
+    } else {
+        let mut vec = input.iter().map(|&x| Complex::new(x, 0.0)).collect();
+        let transform = FastFourierTransform::new(input);
+        transform.fft_rec(&mut vec);
+        vec
+    };
+
     let result: Vec<(f64, f64)> = vec.iter().map(|c| (c.re, c.im)).collect(); 
 
     //println!("{:?}", result); 
@@ -50,8 +53,3 @@ async fn main() -> std::io::Result<()> {
     .run()
     .await
 }
-
-
-
-
-

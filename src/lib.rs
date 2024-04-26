@@ -9,7 +9,7 @@ use std::{f64::consts::PI, simd::Simd, vec};
 use num::complex::{Complex, ComplexFloat};
 use std::simd::f64x2;
 use rayon::prelude::*;
-// use std::sync::{Arc, Mutex};
+use std::sync::{Arc, Mutex};
 
 
 #[derive(Copy, Debug, Clone)]
@@ -149,69 +149,74 @@ fn simd_rec(data: &mut Vec<SimdComplex>, w: Vec<Complex<f64>>) {
     }
 }
 
-fn simd_base(data: Vec<f64>) -> Vec<Simd<f64, 2>> {
-    let size = data.len();
-    let half = size / 2;
-
-    // when size == 4
-    // d0 + d1, d0 - d1
-    let (left, right) = data.split_at(half);
-    let base_case:Vec<_>= left.array_chunks::<2>()
-        .map(|&left| f64x2::from_array(left))
-        .zip(right.array_chunks::<2>().map(|&right| f64x2::from_array(right)))
-        .flat_map(|(left, right)| vec![(left+right).interleave(left-right)])
-        .flat_map(|(left, right)| vec![left, right])
-        .collect();
-
-    // dbg!(base_case.clone());
-    return base_case;
-    
-        // let interleaved_base: Vec<_> = base_case
-        // .chunks_exact(2)
-        // .flat_map(|chunk| {
-        //     let (left, right) = (chunk[0], chunk[1]);
-        //     vec![left.interleave(right)]
-        // })
-        // .flat_map(|(left, right)| vec![left,right])
-        // .collect();
-
-        // dbg!(interleaved_base.clone());
-        // return interleaved_base;
-}
-
-
-// fn simd_base(data: Vec<f64>)  -> Vec<Simd<f64, 2>>{
+// fn simd_base(data: Vec<f64>) -> Vec<Simd<f64, 2>> {
 //     let size = data.len();
 //     let half = size / 2;
-//     let base_re = Arc::new(Mutex::new(Vec::with_capacity(half)));
 
-//     // Spawn threads for interleaving the chunks concurrently
-//     let mut handles = vec![];
-//     for i in 0..half/2 {
-//         let left_chunk = f64x2::from_array([data[i * 2], data[i * 2 + 1]]);
-//         let right_chunk = f64x2::from_array([data[i * 2 + half], data[i * 2 + 1 + half]]);
+//     // when size == 4
+//     // d0 + d1, d0 - d1
+//     let (left, right) = data.split_at(half);
+//     let base_case:Vec<_>= left.array_chunks::<2>()
+//         .map(|&left| f64x2::from_array(left))
+//         .zip(right.array_chunks::<2>().map(|&right| f64x2::from_array(right)))
+//         .flat_map(|(left, right)| vec![(left+right).interleave(left-right)])
+//         .flat_map(|(left, right)| vec![left, right])
+//         .collect();
 
-//         let base_re_clone = Arc::clone(&base_re);
+//     // dbg!(base_case.clone());
+//     return base_case;
+    
+//         // let interleaved_base: Vec<_> = base_case
+//         // .chunks_exact(2)
+//         // .flat_map(|chunk| {
+//         //     let (left, right) = (chunk[0], chunk[1]);
+//         //     vec![left.interleave(right)]
+//         // })
+//         // .flat_map(|(left, right)| vec![left,right])
+//         // .collect();
 
-//         let handle = std::thread::spawn(move || {
-//             let l = left_chunk + right_chunk;
-//             let r = left_chunk - right_chunk;
-
-//             let (interleaved_first, interleaved_second) = l.interleave(r);
-//             let mut base_re = base_re_clone.lock().unwrap();
-//             base_re.push(interleaved_first);
-//             base_re.push(interleaved_second);
-//         });
-//         handles.push(handle);
-//     }
-
-//     // Join threads
-//     for handle in handles {
-//         handle.join().unwrap();
-//     }
-
-//     Arc::try_unwrap(base_re).unwrap().into_inner().unwrap()
+//         // dbg!(interleaved_base.clone());
+//         // return interleaved_base;
 // }
+
+
+fn simd_base(data: Vec<f64>)  -> Vec<Simd<f64, 2>> {
+    let size = data.len();
+    let half = size / 2;
+    let base_re = Arc::new(Mutex::new(Vec::with_capacity(half)));
+
+    // Spawn threads for interleaving the chunks concurrently
+    let mut handles = vec![];
+    for i in 0..half/2 {
+        let left_chunk = f64x2::from_array([data[i * 2], data[i * 2 + 1]]);
+        let right_chunk = f64x2::from_array([data[i * 2 + half], data[i * 2 + 1 + half]]);
+
+        // let base_re_clone = Arc::clone(&base_re);
+
+        let handle = std::thread::spawn(move || {
+            let l = left_chunk + right_chunk;
+            let r = left_chunk - right_chunk;
+
+            let (interleaved_first, interleaved_second) = l.interleave(r);
+            (interleaved_first, interleaved_second)
+        });
+        handles.push(handle);
+    }
+
+    // Join threads and collect results
+    for handle in handles {
+        let (interleaved_first, interleaved_second) = handle.join().unwrap();
+        let mut base_re = base_re.lock().unwrap();
+        base_re.push(interleaved_first);
+        base_re.push(interleaved_second);
+    }
+
+    let tmp = Arc::try_unwrap(base_re).unwrap().into_inner().unwrap();
+    // dbg!(tmp.clone());
+    return tmp;
+
+    
+}
 
 //only implemented for base case where data.len() == 4 (for fully simd operation)
 //see: https://doc.rust-lang.org/std/simd/type.f64x2.html

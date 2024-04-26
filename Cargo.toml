@@ -8,7 +8,10 @@ edition = "2021"
 
 [dependencies]
 num = "0.4"
+rayon = "1.1"
 actix-web = "4.0"
 actix-files = "0.6.5"
-itertools = "0.10.0"
 serde = "1.0.198"
+# NOTE: proc-macro2 1.0.81 conflict with current nightly version
+# TODO: Delete this after rustc upgraded.
+proc-macro2 = "=1.0.79"

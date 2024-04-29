@@ -35,6 +35,7 @@ Our project focuses on implementing the Cooley-Tukey Fast Fourier Transform (FFT
 - Develop the core algorithm for computing the Cooley-Tukey FFT in Rust.
 - Implement both forward and inverse FFT transformations.
 - Verify the correctness of the implementation through unit tests and validation against known FFT results by Matlab.
+- Implement frontend interface. 
 
 
 ### **Checkpoint 1** 
@@ -48,6 +49,7 @@ Our project focuses on implementing the Cooley-Tukey Fast Fourier Transform (FFT
 - Completion of multithreading optimization.
 - Comprehensive performance analysis and benchmarking.
 - Finalization of documentation and project submission.
+- Implementation of frontend interface. 
 
 ## Possible Challenges
 

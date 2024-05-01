@@ -28,8 +28,6 @@ To use SIMD features for base cases, install Rust Nightly with:
 rustup default nightly
 ```
 
-You don't need to install nightly to use the calculator. We only implemented the SIMD features for 2\*2 base cases.
-
 ## Run the server
 ### General Procedure
 Direct into the directory and run the server in VSCode terminal with:

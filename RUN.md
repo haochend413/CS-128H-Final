@@ -19,7 +19,7 @@ For rust and cargo installation guide, please visit https://doc.rust-lang.org/ca
 Clone the project from the repo:
 
 ```bash
-git clone https://github.com/haochend413/CS-128H-Final.git
+git clone https://github.com/haochend413/FFT-Calculator.git
 ```
 
 To use SIMD features for base cases, install Rust Nightly with:
@@ -31,7 +31,7 @@ rustup default nightly
 You don't need to install nightly to use the calculator. We only implemented the SIMD features for 2\*2 base cases.
 
 ## Run the server
-
+### General Procedure
 Direct into the directory and run the server in VSCode terminal with:
 
 ```bash
@@ -41,6 +41,8 @@ cd FFT-Calculator
 ```bash
 cargo run
 ```
+### On Windows
+Please run our project on linux. To run the project on Windows, you might consider install the stable Rust toolchain for the 64-bit Windows GNU target (x86_64-pc-windows-gnu) using rustup, and install GCC on Windows. 
 
 ## Play in browser
 

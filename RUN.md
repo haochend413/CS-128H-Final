@@ -22,7 +22,7 @@ Clone the project from the repo:
 git clone https://github.com/haochend413/FFT-Calculator.git
 ```
 
-To use SIMD features for base cases, install Rust Nightly with:
+Install Rust Nightly to use SIMD features:
 
 ```bash
 rustup default nightly

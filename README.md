@@ -1,6 +1,6 @@
-# CS128H-Final-Project
+# Fast Fourier Transform Calculator
 
-### **Fast Fourier Transform**
+### CS-128 Honors Final Project
 
 
 
